@@ -22,9 +22,6 @@ class Pack(models.Model):
     pet_name = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     
-# This method allows us to test that the code is the same as a double in our tests
-    def _str_(self):
-        return self.code
 
 # For food.
 class Food(models.Model):
@@ -35,9 +32,6 @@ class Food(models.Model):
     treats = models.IntegerField(null=False, default=0)
     pack = models.ForeignKey(Pack, on_delete=models.CASCADE)
 
-# The __str__ method just tells Django what to print when it needs to print out an instance of the any model.
-    def _str_(self):
-        return self.meal_type
 
 class Walk(models.Model):
     date = models.DateField()
