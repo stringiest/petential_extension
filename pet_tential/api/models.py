@@ -21,6 +21,10 @@ class Pack(models.Model):
     host = models.CharField(max_length=50, unique=True)
     pet_name = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+# This method allows us to test that the code is the same as a double in our tests
+    def _str_(self):
+        return self.code
 
 # For food.
 class Food(models.Model):
