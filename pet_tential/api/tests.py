@@ -23,6 +23,10 @@ class PackTest(TestCase):
 
 
 class JoinPackViewTest(TestCase):
+
+    def create_pack(self, code="ADMINS", host="Admin", pet_name="Admin"):
+        return Pack.objects.create(code=code, host=host, pet_name=pet_name, created_at=timezone.now())
+
     def test_join_pack_use_empty_code(self):
         print('******************test_join_pack_use_empty_code()**********************')
         code_test_data = {}
@@ -42,3 +46,12 @@ class JoinPackViewTest(TestCase):
         self.assertEqual(response.status_code, 400)
         # if the provided string exist in the response content html, then pass.
         self.assertIn(b'{"Bad Request":"Invalid Pack Code"}', response.content)
+
+    def test_join_pack_success(self):
+        print('******************test_join_pack_success()**********************')
+        pack = self.create_pack()
+        code_test_data = {'code' :'ADMINS'}
+        response = self.client.post(path='/api/join-pack', data=code_test_data)
+        print('Response status code : ' + str(response.status_code))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'{"message":"Pack Joined!"}', response.content)
