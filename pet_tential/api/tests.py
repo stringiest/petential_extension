@@ -32,3 +32,13 @@ class JoinPackViewTest(TestCase):
         #print('Response content : ' + str(response.content))
         self.assertEqual(response.status_code, 400)
         self.assertIn(b'{"Bad Request":"Invalid post data, did not find a code key"}', response.content)
+
+    def test_join_pack_use_invalid_code(self):
+        print('******************test_join_pack_use_invalid_code()**********************')
+        code_test_data = {'code' :'ABCDEF'}
+        response = self.client.post(path='/api/join-pack', data=code_test_data)
+        print('Response status code : ' + str(response.status_code))
+        #print('Response content : ' + str(response.content))
+        self.assertEqual(response.status_code, 400)
+        # if the provided string exist in the response content html, then pass.
+        self.assertIn(b'{"Bad Request":"Invalid Pack Code"}', response.content)
