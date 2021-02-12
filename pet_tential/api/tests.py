@@ -15,10 +15,20 @@ class PackTest(TestCase):
     #     self.assertEqual(pack._str_(), pack.code)
     
     def test_generate_unique_code(self):
+        print('******************test_generate_unique_code()**********************')
         # The below random seed will always create the code OLPFVV
         # Tricky to test uniqueness but can test randomness!
         random.seed(10)
         self.assertEqual(generate_unique_code(), "OLPFVV")
 
 
-
+class JoinPackViewTest(TestCase):
+    def test_join_pack_use_empty_code(self):
+        print('******************test_join_pack_use_empty_code()**********************')
+        code_test_data = {}
+        # send POST request.
+        response = self.client.post(path='/api/join-pack', data=code_test_data)
+        print('Response status code : ' + str(response.status_code))
+        #print('Response content : ' + str(response.content))
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b'{"Bad Request":"Invalid post data, did not find a code key"}', response.content)
