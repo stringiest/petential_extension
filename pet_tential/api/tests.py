@@ -6,6 +6,16 @@ from .serializers import FoodSerializer, CreateFoodSerializer, PackSerializer, C
 from importlib import import_module
 
 
+class ModifySessionMixin(object):
+    client = Client()
+
+    def create_session(self):   
+        session_engine = import_module(settings.SESSION_ENGINE)       
+        print(session_engine) 
+        store = session_engine.SessionStore()    
+        print(store)                      
+        store.save()
+        self.client.cookies[settings.SESSION_COOKIE_NAME] = store.session_key
 
 class PackTest(TestCase):
   
@@ -57,7 +67,7 @@ class JoinPackViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'{"message":"Pack Joined!"}', response.content)
 
-class CreateFoodViewTest(TestCase):
+class CreateFoodViewTest(ModifySessionMixin, TestCase):
     
     def test_add_food_with_invalid_data(self):
         print('******************test_add_food_with_invalid_data()**********************')
@@ -68,4 +78,13 @@ class CreateFoodViewTest(TestCase):
         #print('Response content : ' + str(response.content))
         self.assertEqual(response.status_code, 400)
         self.assertIn(b'{"Bad Request":"Invalid data..."}', response.content)
+    
+    def test_add_food_success(self):
+        print('******************test_add_food_success()**********************')
+        self.create_session()
+        food_test_data = {'meal_type':'breakfast', 'date':'2021-02-12', 'comment':'yum', 'treats':'4'}
+        response = self.client.post(path='/api/add-food', data=food_test_data)
+        print('Response status code : ' + str(response.status_code))
+        self.assertEqual(response.status_code, 201)
+        self.assertIn(b'{"message":"Pack Joined!"}', response.content)
 
