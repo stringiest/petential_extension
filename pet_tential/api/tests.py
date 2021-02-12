@@ -1,13 +1,14 @@
-from django.test import TestCase
-from .models import generate_unique_code, Pack
+from django.test import TestCase, Client
+from .models import generate_unique_code, Pack, Food
 from django.utils import timezone
 import random
+from .serializers import FoodSerializer, CreateFoodSerializer, PackSerializer, CreatePackSerializer, WalkSerializer, CreateWalkSerializer
+from importlib import import_module
+
+
 
 class PackTest(TestCase):
-   # creates a pack object and returns it 
-    # def create_pack(self, code="ABCDEF", host="Georgie", pet_name="Baloo"):
-    #     return Pack.objects.create(code=code, host=host, pet_name=pet_name, created_at=timezone.now())
-
+  
 # tests to see if the pack object has the properties we expect
     # def test_pack_creation(self):
     #     pack = self.create_pack()
@@ -55,3 +56,16 @@ class JoinPackViewTest(TestCase):
         print('Response status code : ' + str(response.status_code))
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'{"message":"Pack Joined!"}', response.content)
+
+class CreateFoodViewTest(TestCase):
+    
+    def test_add_food_with_invalid_data(self):
+        print('******************test_add_food_with_invalid_data()**********************')
+        food_test_data = {}
+        # send POST request.
+        response = self.client.post(path='/api/add-food', data=food_test_data)
+        print('Response status code : ' + str(response.status_code))
+        #print('Response content : ' + str(response.content))
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b'{"Bad Request":"Invalid data..."}', response.content)
+
