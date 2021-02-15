@@ -54,3 +54,5 @@ Petential is a web application that allows you and members of your family to kee
 Petential was made as a 2 week final project for Makers by:
 
 [Mel](https://github.com/TamMelPer) | [Lucy](https://github.com/stringiest) | [Savanna](https://github.com/savannaelbey) | [Georgie](https://github.com/horthbynorthwest)
+
+Extension work was undertaken by Mel, Lucy & Georgie.
