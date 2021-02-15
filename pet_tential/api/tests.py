@@ -79,6 +79,20 @@ class JoinPackViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'{"message":"Pack Joined!"}', response.content)
 
+class CreatePackViewTest(TestCase):
+
+    def test_create_pack_use_empty_date(self):
+        print('******************test_create_pack_use_empty_code()**********************')
+        code_test_data = {}
+        # send POST request.
+        response = self.client.post(path='/api/add-pack', data=code_test_data)
+        print('Response status code : ' + str(response.status_code))
+        #print('Response content : ' + str(response.content))
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b'{"Bad Request":"Invalid data..."}', response.content)
+
+
+
 class CreateFoodViewTest(ModifySessionMixin, TestCase):
     
     def test_add_food_with_invalid_data(self):
