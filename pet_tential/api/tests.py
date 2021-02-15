@@ -91,6 +91,17 @@ class CreatePackViewTest(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn(b'{"Bad Request":"Invalid data..."}', response.content)
 
+class GetFoodViewTest(TestCase):
+
+    def test_get_food_empty_pack_id(self):
+        print('******************test_get_food_empty_pack_id()**********************')
+        pack_id_test_data = {}
+        # send GET request.
+        response = self.client.get(path='/api/get-food', data=pack_id_test_data)
+        print('Response status code : ' + str(response.status_code))
+        #print('Response content : ' + str(response.content))
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b'{"Bad Request":"Pack id paramater not found in request"}', response.content)
 
 
 class CreateFoodViewTest(ModifySessionMixin, TestCase):
