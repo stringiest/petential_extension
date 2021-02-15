@@ -1,6 +1,8 @@
 from django.db import models
 import string
 import random
+from datetime import datetime
+from django.utils import timezone
 #from durationfield.db.models.fields.duration import DurationField
 
 
@@ -27,7 +29,7 @@ class Pack(models.Model):
 class Food(models.Model):
     meal_type = models.CharField(max_length=20, null=True, default="")
     date = models.DateField()
-    fed_at = models.DateTimeField(auto_now_add=True)
+    fed_at = models.DateTimeField(default=timezone.now)
     comment = models.CharField(max_length=100, null=True, default="")
     treats = models.IntegerField(null=False, default=0)
     pack = models.ForeignKey(Pack, on_delete=models.CASCADE)
