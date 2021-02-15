@@ -32,6 +32,18 @@ class PackTest(TestCase):
         random.seed(10)
         self.assertEqual(generate_unique_code(), "OLPFVV")
 
+class GetPackViewTest(TestCase):
+
+    def test_get_pack_empty_code(self):
+        print('******************test_get_pack_empty_code()**********************')
+        code_test_data = {}
+        # send GET request.
+        response = self.client.get(path='/api/get-pack', data=code_test_data)
+        print('Response status code : ' + str(response.status_code))
+        #print('Response content : ' + str(response.content))
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b'{"Bad Request":"Code paramater not found in request"}', response.content)
+
 
 class JoinPackViewTest(TestCase):
 
