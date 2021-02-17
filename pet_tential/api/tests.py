@@ -39,6 +39,9 @@ class PackTest(TestCase):
 
 class GetPackViewTest(TestCase):
 
+    def create_pack(self, code="ADMINS", host="Admin", pet_name="Admin"):
+        return Pack.objects.create(code=code, host=host, pet_name=pet_name, created_at=timezone.now())
+
     def test_get_pack_empty_code(self):
         print('******************test_get_pack_empty_code()**********************')
         code_test_data = {}
@@ -49,6 +52,13 @@ class GetPackViewTest(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn(b'{"Bad Request":"Code paramater not found in request"}', response.content)
 
+    def test_get_pack_invalid_code(self):
+        print('******************test_get_pack_invalid_code()**********************')
+        code_test_data = {'code' :'ABCDEF'}
+        response = self.client.get(path='/api/get-pack', data=code_test_data)
+        print('Response status code : ' + str(response.status_code))
+        self.assertEqual(response.status_code, 404)
+        self.assertIn(b'{"Pack Not Found":"Invalid Pack Code"}', response.content)
 
 class JoinPackViewTest(TestCase):
 
