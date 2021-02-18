@@ -59,6 +59,20 @@ class GetPackViewTest(TestCase):
         print('Response status code : ' + str(response.status_code))
         self.assertEqual(response.status_code, 404)
         self.assertIn(b'{"Pack Not Found":"Invalid Pack Code"}', response.content)
+    
+    @freeze_time("2021-02-14T12:00:01.062952Z")
+    def test_get_pack_success(self):
+        print('******************test_get_pack_success()**********************')
+        pack = self.create_pack()
+        code_test_data = {'code' :'ADMINS'}
+        response = self.client.get(path='/api/get-pack', data=code_test_data)
+        print('Response status code : ' + str(response.status_code))
+        # queryset = Pack.objects.all()
+        # print(queryset)
+        # print(pack.id)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'{"id":2,"code":"ADMINS","host":"Admin","pet_name":"Admin","created_at":"2021-02-14T12:00:01.062952Z","is_host":false}', response.content)
+
 
 class JoinPackViewTest(TestCase):
 
