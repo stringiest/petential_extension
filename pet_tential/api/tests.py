@@ -5,8 +5,9 @@ import random
 from .serializers import FoodSerializer, CreateFoodSerializer, PackSerializer, CreatePackSerializer, WalkSerializer, CreateWalkSerializer
 from importlib import import_module
 from datetime import datetime
-
+from django.contrib.sessions.models import Session
 from freezegun import freeze_time
+from unittest.mock import MagicMock
 
 
 # class ModifySessionMixin(object):
@@ -71,7 +72,7 @@ class GetPackViewTest(TestCase):
         # print(queryset)
         # print(pack.id)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'{"id":2,"code":"ADMINS","host":"Admin","pet_name":"Admin","created_at":"2021-02-14T12:00:01.062952Z","is_host":false}', response.content)
+        self.assertIn(b'{"id":3,"code":"ADMINS","host":"Admin","pet_name":"Admin","created_at":"2021-02-14T12:00:01.062952Z","is_host":false}', response.content)
 
 
 class JoinPackViewTest(TestCase):
@@ -110,6 +111,10 @@ class JoinPackViewTest(TestCase):
 
 class CreatePackViewTest(TestCase):
 
+    def create_pack(self, code="BADMIN", host="Badmin", pet_name="Badmin"):
+        return Pack.objects.create(code=code, host=host, pet_name=pet_name, created_at=timezone.now())
+
+
     def test_create_pack_use_empty_date(self):
         print('******************test_create_pack_use_empty_code()**********************')
         code_test_data = {}
@@ -119,6 +124,19 @@ class CreatePackViewTest(TestCase):
         #print('Response content : ' + str(response.content))
         self.assertEqual(response.status_code, 400)
         self.assertIn(b'{"Bad Request":"Invalid data..."}', response.content)
+
+    @freeze_time("2021-02-14T12:00:01.062952Z")
+    def test_create_pack_success(self):
+        print('******************test_create_pack_success()**********************')
+        random.seed(10)
+        session = self.client.session
+        # need to work out how to stub the session_key
+        session.save()
+        pack_test_data = {'pet_name':'Badmin'}
+        response = self.client.post(path='/api/add-pack', data=pack_test_data)
+        print('Response status code : ' + str(response.status_code))
+        self.assertEqual(response.status_code, 201)
+        self.assertIn(b'{"id":2,"code":"OLPFVV","host":"Badmin","pet_name":"Badmin","created_at":"2021-02-14T12:00:01.062952Z"}', response.content)
 
 class GetFoodViewTest(TestCase):
 
