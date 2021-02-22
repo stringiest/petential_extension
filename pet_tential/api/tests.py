@@ -138,6 +138,17 @@ class CreatePackViewTest(TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn(b'{"id":2,"code":"OLPFVV","host":"Badmin","pet_name":"Badmin","created_at":"2021-02-14T12:00:01.062952Z"}', response.content)
 
+class UserInPackViewTest(TestCase):
+    def test_user_in_pack(self):
+        print('******************test_user_in_pack()**********************')
+        session = self.client.session
+        session['pack_code'] = 'ADMINS'
+        session['pack_id'] = '7'
+        session.save()
+        response = self.client.get(path='/api/user-in-pack')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'{"code": "ADMINS", "id": "7"}', response.content)
+
 class LeavePackViewTest(TestCase):
     def test_leave_pack_success(self):
         print('******************test_leave_pack_success()**********************')
