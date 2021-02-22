@@ -72,7 +72,7 @@ class GetPackViewTest(TestCase):
         # print(queryset)
         # print(pack.id)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'{"id":4,"code":"ADMINS","host":"Admin","pet_name":"Admin","created_at":"2021-02-14T12:00:01.062952Z","is_host":false}', response.content)
+        self.assertIn(b'{"id":5,"code":"ADMINS","host":"Admin","pet_name":"Admin","created_at":"2021-02-14T12:00:01.062952Z","is_host":false}', response.content)
 
 
 class JoinPackViewTest(TestCase):
@@ -139,6 +139,8 @@ class CreatePackViewTest(TestCase):
         self.assertIn(b'{"id":2,"code":"OLPFVV","host":"Badmin","pet_name":"Badmin","created_at":"2021-02-14T12:00:01.062952Z"}', response.content)
 
 class GetFoodViewTest(TestCase):
+    def create_pack(self, code="ADMINS", host="Admin", pet_name="Admin"):
+        return Pack.objects.create(code=code, host=host, pet_name=pet_name, created_at=timezone.now())
 
     def test_get_food_empty_pack_id(self):
         print('******************test_get_food_empty_pack_id()**********************')
@@ -149,6 +151,19 @@ class GetFoodViewTest(TestCase):
         #print('Response content : ' + str(response.content))
         self.assertEqual(response.status_code, 400)
         self.assertIn(b'{"Bad Request":"Pack id paramater not found in request"}', response.content)
+
+    @freeze_time("2021-02-14T12:00:01.062952Z")
+    def test_get_food_valid_pack_id(self):
+        pack = self.create_pack()
+        pack_id_test_data = {'pack_id' :'4'}
+        session = self.client.session
+        session['pack_id'] = '4'
+        session.save()
+        food_test_data = {'meal_type':'breakfast', 'date':'2021-02-12', 'comment':'yum', 'treats':'4'}
+        self.client.post(path='/api/add-food', data=food_test_data)
+        response = self.client.get(path='/api/get-food', data=pack_id_test_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'[{"id":2,"meal_type":"breakfast","date":"2021-02-12","fed_at":"2021-02-14T12:00:01.062952Z","comment":"yum","treats":4,"pack_id":4}]', response.content)        
 
 
 class CreateFoodViewTest(TestCase):
