@@ -1,14 +1,16 @@
-from django.test import TestCase, Client
-from .models import generate_unique_code, Pack, Food, Walk
-from django.utils import timezone
+import json
 import random
-from .serializers import FoodSerializer, CreateFoodSerializer, PackSerializer, CreatePackSerializer, WalkSerializer, CreateWalkSerializer
+
+from django.test import TestCase, Client
+from django.utils import timezone
 from importlib import import_module
 from datetime import datetime
 from django.contrib.sessions.models import Session
 from freezegun import freeze_time
 from unittest.mock import MagicMock
 
+from .models import generate_unique_code, Pack, Food, Walk
+from .serializers import FoodSerializer, CreateFoodSerializer, PackSerializer, CreatePackSerializer, WalkSerializer, CreateWalkSerializer
 
 # class ModifySessionMixin(object):
 #     client = Client()
@@ -135,8 +137,10 @@ class CreatePackViewTest(TestCase):
         pack_test_data = {'pet_name':'Badmin'}
         response = self.client.post(path='/api/add-pack', data=pack_test_data)
         print('Response status code : ' + str(response.status_code))
+        print(session.session_key)
+        json_content = json.loads(response.content)
         self.assertEqual(response.status_code, 201)
-        self.assertIn(b'{"id":2,"code":"OLPFVV","host":"Badmin","pet_name":"Badmin","created_at":"2021-02-14T12:00:01.062952Z"}', response.content)
+        self.assertEqual({'id': 2, 'code': 'OLPFVV', 'host': session.session_key, 'pet_name': 'Badmin', 'created_at': '2021-02-14T12:00:01.062952Z'}, json_content)
 
 class UserInPackViewTest(TestCase):
     def test_user_in_pack(self):
@@ -146,12 +150,14 @@ class UserInPackViewTest(TestCase):
         session['pack_id'] = '7'
         session.save()
         response = self.client.get(path='/api/user-in-pack')
+        print('Response status code : ' + str(response.status_code))
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'{"code": "ADMINS", "id": "7"}', response.content)
 
     def test_user_not_in_pack(self):
         print('******************test_user_not_in_pack()**********************')
         response = self.client.get(path='/api/user-in-pack')
+        print('Response status code : ' + str(response.status_code))
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'{"code": null, "id": null}', response.content)
 
@@ -163,6 +169,7 @@ class LeavePackViewTest(TestCase):
         session.save()
         pack_test_data = {'pack_code':'ADMINS'}
         response = self.client.post(path='/api/leave-pack', data=pack_test_data)
+        print('Response status code : ' + str(response.status_code))
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'{"Message":"Success"}', response.content)
 
