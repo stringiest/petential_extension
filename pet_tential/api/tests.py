@@ -72,7 +72,7 @@ class GetPackViewTest(TestCase):
         # print(queryset)
         # print(pack.id)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'{"id":3,"code":"ADMINS","host":"Admin","pet_name":"Admin","created_at":"2021-02-14T12:00:01.062952Z","is_host":false}', response.content)
+        self.assertIn(b'{"id":4,"code":"ADMINS","host":"Admin","pet_name":"Admin","created_at":"2021-02-14T12:00:01.062952Z","is_host":false}', response.content)
 
 
 class JoinPackViewTest(TestCase):
@@ -193,3 +193,15 @@ class CreateWalkViewTest(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn(b'{"Bad Request":"Invalid data..."}', response.content)
     
+    # @freeze_time("2021-02-14T12:00:01.062952Z")
+    def test_add_walk_success(self):
+        print('******************test_add_walk_success()**********************')
+        pack = self.create_pack()
+        session = self.client.session
+        session['pack_id'] = '3'
+        session.save()
+        walk_test_data = {'date':'2021-02-12', 'time':'12:45', 'duration':'5 minutes', 'comment':'great'}
+        response = self.client.post(path='/api/add-walk', data=walk_test_data)
+        print('Response status code : ' + str(response.status_code))
+        self.assertEqual(response.status_code, 201)
+        self.assertIn(b'{"id":1,"date":"2021-02-12","time":"12:45:00","duration":"5 minutes","comment":"great","pack_id":"3"}', response.content)
