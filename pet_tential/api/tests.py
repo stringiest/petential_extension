@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from .models import generate_unique_code, Pack, Food
+from .models import generate_unique_code, Pack, Food, Walk
 from django.utils import timezone
 import random
 from .serializers import FoodSerializer, CreateFoodSerializer, PackSerializer, CreatePackSerializer, WalkSerializer, CreateWalkSerializer
@@ -177,3 +177,19 @@ class CreateFoodViewTest(TestCase):
         print('Response status code : ' + str(response.status_code))
         self.assertEqual(response.status_code, 201)
         self.assertIn(b'{"id":1,"meal_type":"breakfast","date":"2021-02-12","fed_at":"2021-02-14T12:00:01.062952Z","comment":"yum","treats":4,"pack_id":"1"}', response.content)
+
+
+class CreateWalkViewTest(TestCase):
+    def create_pack(self, code="ADMINS", host="Admin", pet_name="Admin"):
+        return Pack.objects.create(code=code, host=host, pet_name=pet_name, created_at=timezone.now())
+    
+    def test_add_walk_with_invalid_data(self):
+        print('******************test_add_walk_with_invalid_data()**********************')
+        walk_test_data = {}
+        # send POST request.
+        response = self.client.post(path='/api/add-walk', data=walk_test_data)
+        print('Response status code : ' + str(response.status_code))
+        #print('Response content : ' + str(response.content))
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b'{"Bad Request":"Invalid data..."}', response.content)
+    
