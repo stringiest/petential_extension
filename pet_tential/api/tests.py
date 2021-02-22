@@ -138,6 +138,17 @@ class CreatePackViewTest(TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn(b'{"id":2,"code":"OLPFVV","host":"Badmin","pet_name":"Badmin","created_at":"2021-02-14T12:00:01.062952Z"}', response.content)
 
+class LeavePackViewTest(TestCase):
+    def test_leave_pack_success(self):
+        print('******************test_leave_pack_success()**********************')
+        session = self.client.session
+        session['pack_code'] = 'ADMINS'
+        session.save()
+        pack_test_data = {'pack_code':'ADMINS'}
+        response = self.client.post(path='/api/leave-pack', data=pack_test_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'{"Message":"Success"}', response.content)
+
 class GetFoodViewTest(TestCase):
     def create_pack(self, code="ADMINS", host="Admin", pet_name="Admin"):
         return Pack.objects.create(code=code, host=host, pet_name=pet_name, created_at=timezone.now())
