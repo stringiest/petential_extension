@@ -30,6 +30,13 @@ Petential is a web application that allows you and members of your family to kee
 10. Run `npm run dev` to start the front end server 
 11. Navigate to  [localhost](http://localhost:8000/)  or if your console specifies another port, navigate to that instead of 8000
 
+## Run Tests 
+
+1. `cd pet_tential`  to move into the project repo.
+2. Run  `python3 manage.py test -v 2 `  to run tests.
+3. To see test coverage, run `coverage run --omit='*/venv/*' manage.py test` and then `coverage html`.
+4. `cd htmlcov` and then `open index.html` to see a snapshot of the test coverage (99% coverage backend). 
+
 ## Tech Stack
 
 |Use        | Backend|      Frontend|

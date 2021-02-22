@@ -25,7 +25,7 @@ class GetPack(APIView):
                 data['is_host'] = self.request.session.session_key == pack[0].host
                 data['id'] = self.request.session['pack_id'] = pack[0].id
                 return Response(data, status=status.HTTP_200_OK)
-            return Response({'Pack Not Found': 'Invalid Pack Code.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'Pack Not Found': 'Invalid Pack Code'}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({'Bad Request': 'Code paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)
 
