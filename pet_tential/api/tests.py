@@ -205,3 +205,15 @@ class CreateWalkViewTest(TestCase):
         print('Response status code : ' + str(response.status_code))
         self.assertEqual(response.status_code, 201)
         self.assertIn(b'{"id":1,"date":"2021-02-12","time":"12:45:00","duration":"5 minutes","comment":"great","pack_id":"3"}', response.content)
+
+class GetWalkViewTest(TestCase):
+
+    def test_get_walk_empty_pack_id(self):
+        print('******************test_get_walk_empty_pack_id()**********************')
+        pack_id_test_data = {}
+        # send GET request.
+        response = self.client.get(path='/api/get-walk', data=pack_id_test_data)
+        print('Response status code : ' + str(response.status_code))
+        #print('Response content : ' + str(response.content))
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(b'{"Bad Request":"Pack id paramater not found in request"}', response.content)
