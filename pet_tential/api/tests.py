@@ -154,6 +154,7 @@ class GetFoodViewTest(TestCase):
 
     @freeze_time("2021-02-14T12:00:01.062952Z")
     def test_get_food_valid_pack_id(self):
+        print('******************test_get_food_valid_pack_id()**********************')
         pack = self.create_pack()
         pack_id_test_data = {'pack_id' :'4'}
         session = self.client.session
@@ -223,6 +224,9 @@ class CreateWalkViewTest(TestCase):
 
 class GetWalkViewTest(TestCase):
 
+    def create_pack(self, code="ADMINS", host="Admin", pet_name="Admin"):
+        return Pack.objects.create(code=code, host=host, pet_name=pet_name, created_at=timezone.now())
+
     def test_get_walk_empty_pack_id(self):
         print('******************test_get_walk_empty_pack_id()**********************')
         pack_id_test_data = {}
@@ -232,3 +236,16 @@ class GetWalkViewTest(TestCase):
         #print('Response content : ' + str(response.content))
         self.assertEqual(response.status_code, 400)
         self.assertIn(b'{"Bad Request":"Pack id paramater not found in request"}', response.content)
+    
+    def test_get_walk_valid_pack_id(self):
+        print('******************test_get_walk_valid_pack_id()**********************')
+        pack = self.create_pack()
+        pack_id_test_data = {'pack_id' :'6'}
+        session = self.client.session
+        session['pack_id'] = '6'
+        session.save()
+        walk_test_data = {'date':'2021-02-12', 'time':'12:45', 'duration':'5 minutes', 'comment':'great'}
+        self.client.post(path='/api/add-walk', data=walk_test_data)
+        response = self.client.get(path='/api/get-walk', data=pack_id_test_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'[{"id":2,"date":"2021-02-12","time":"12:45:00","duration":"5 minutes","comment":"great","pack_id":6}]', response.content)  
