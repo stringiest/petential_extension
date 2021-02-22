@@ -74,7 +74,7 @@ class GetPackViewTest(TestCase):
         # print(queryset)
         # print(pack.id)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'{"id":5,"code":"ADMINS","host":"Admin","pet_name":"Admin","created_at":"2021-02-14T12:00:01.062952Z","is_host":false}', response.content)
+        self.assertIn(b'{"id":6,"code":"ADMINS","host":"Admin","pet_name":"Admin","created_at":"2021-02-14T12:00:01.062952Z","is_host":false}', response.content)
 
 
 class JoinPackViewTest(TestCase):
@@ -132,7 +132,6 @@ class CreatePackViewTest(TestCase):
         print('******************test_create_pack_success()**********************')
         random.seed(10)
         session = self.client.session
-        # need to work out how to stub the session_key
         session.save()
         pack_test_data = {'pet_name':'Badmin'}
         response = self.client.post(path='/api/add-pack', data=pack_test_data)
@@ -141,6 +140,20 @@ class CreatePackViewTest(TestCase):
         json_content = json.loads(response.content)
         self.assertEqual(response.status_code, 201)
         self.assertEqual({'id': 2, 'code': 'OLPFVV', 'host': session.session_key, 'pet_name': 'Badmin', 'created_at': '2021-02-14T12:00:01.062952Z'}, json_content)
+
+    @freeze_time("2021-02-14T12:00:01.062952Z")
+    def test_update_pack_success(self):
+        print('******************test_update_pack_success()**********************')
+        random.seed(10)
+        session = self.client.session
+        session.save()
+        pack_test_data = {'pet_name':'Badmin'}
+        self.client.post(path='/api/add-pack', data=pack_test_data)
+        update_pack_test_data = {'pet_name':'Baloo'}
+        response = self.client.post(path='/api/add-pack', data=update_pack_test_data)
+        json_content = json.loads(response.content)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({'id': 3, 'code': 'OLPFVV', 'host': session.session_key, 'pet_name': 'Baloo', 'created_at': '2021-02-14T12:00:01.062952Z'}, json_content)
 
 class UserInPackViewTest(TestCase):
     def test_user_in_pack(self):
@@ -191,15 +204,15 @@ class GetFoodViewTest(TestCase):
     def test_get_food_valid_pack_id(self):
         print('******************test_get_food_valid_pack_id()**********************')
         pack = self.create_pack()
-        pack_id_test_data = {'pack_id' :'4'}
+        pack_id_test_data = {'pack_id' :'5'}
         session = self.client.session
-        session['pack_id'] = '4'
+        session['pack_id'] = '5'
         session.save()
         food_test_data = {'meal_type':'breakfast', 'date':'2021-02-12', 'comment':'yum', 'treats':'4'}
         self.client.post(path='/api/add-food', data=food_test_data)
         response = self.client.get(path='/api/get-food', data=pack_id_test_data)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'[{"id":2,"meal_type":"breakfast","date":"2021-02-12","fed_at":"2021-02-14T12:00:01.062952Z","comment":"yum","treats":4,"pack_id":4}]', response.content)        
+        self.assertIn(b'[{"id":2,"meal_type":"breakfast","date":"2021-02-12","fed_at":"2021-02-14T12:00:01.062952Z","comment":"yum","treats":4,"pack_id":5}]', response.content)        
 
 
 class CreateFoodViewTest(TestCase):
@@ -249,13 +262,13 @@ class CreateWalkViewTest(TestCase):
         print('******************test_add_walk_success()**********************')
         pack = self.create_pack()
         session = self.client.session
-        session['pack_id'] = '3'
+        session['pack_id'] = '4'
         session.save()
         walk_test_data = {'date':'2021-02-12', 'time':'12:45', 'duration':'5 minutes', 'comment':'great'}
         response = self.client.post(path='/api/add-walk', data=walk_test_data)
         print('Response status code : ' + str(response.status_code))
         self.assertEqual(response.status_code, 201)
-        self.assertIn(b'{"id":1,"date":"2021-02-12","time":"12:45:00","duration":"5 minutes","comment":"great","pack_id":"3"}', response.content)
+        self.assertIn(b'{"id":1,"date":"2021-02-12","time":"12:45:00","duration":"5 minutes","comment":"great","pack_id":"4"}', response.content)
 
 class GetWalkViewTest(TestCase):
 
@@ -275,12 +288,12 @@ class GetWalkViewTest(TestCase):
     def test_get_walk_valid_pack_id(self):
         print('******************test_get_walk_valid_pack_id()**********************')
         pack = self.create_pack()
-        pack_id_test_data = {'pack_id' :'6'}
+        pack_id_test_data = {'pack_id' :'7'}
         session = self.client.session
-        session['pack_id'] = '6'
+        session['pack_id'] = '7'
         session.save()
         walk_test_data = {'date':'2021-02-12', 'time':'12:45', 'duration':'5 minutes', 'comment':'great'}
         self.client.post(path='/api/add-walk', data=walk_test_data)
         response = self.client.get(path='/api/get-walk', data=pack_id_test_data)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'[{"id":2,"date":"2021-02-12","time":"12:45:00","duration":"5 minutes","comment":"great","pack_id":6}]', response.content)  
+        self.assertIn(b'[{"id":2,"date":"2021-02-12","time":"12:45:00","duration":"5 minutes","comment":"great","pack_id":7}]', response.content)  
