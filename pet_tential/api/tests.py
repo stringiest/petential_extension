@@ -149,6 +149,12 @@ class UserInPackViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'{"code": "ADMINS", "id": "7"}', response.content)
 
+    def test_user_not_in_pack(self):
+        print('******************test_user_not_in_pack()**********************')
+        response = self.client.get(path='/api/user-in-pack')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'{"code": null, "id": null}', response.content)
+
 class LeavePackViewTest(TestCase):
     def test_leave_pack_success(self):
         print('******************test_leave_pack_success()**********************')
