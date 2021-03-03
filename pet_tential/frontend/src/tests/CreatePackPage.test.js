@@ -17,3 +17,9 @@ it("renders without crashing", () => {
     expect(appComponent.length).toBe(1);
   });
 
+  it("renders button for create pack", () => {
+    const wrapper = shallow(<CreatePackPage />);
+    const button = wrapper.find("[data-test='create-button']")
+    expect(button.length).toBe(1);
+  });
+

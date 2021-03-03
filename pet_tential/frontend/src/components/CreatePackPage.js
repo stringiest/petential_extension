@@ -72,6 +72,7 @@ export default class CreatePackPage extends Component {
           </Grid>
           <Grid item xs={12} align="center">
             <Button
+              data-test='create-button'
               color="primary"
               variant="contained"
               onClick={this.handleSubmitButtonPressed}
