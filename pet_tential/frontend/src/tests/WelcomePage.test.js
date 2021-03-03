@@ -10,13 +10,18 @@ import WelcomePage from '../components/WelcomePage';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-it("renders without crashing", () => {
+it("renders without error", () => {
   const wrapper = shallow(<WelcomePage />);
   const appComponent = wrapper.find("[data-test='component-welcome']")
   // const appComponent = findByTestAttr(wrapper, 'component-app');
   expect(appComponent.length).toBe(1);
   });
 
+it("renders button for create pack", () => {
+  const wrapper = shallow(<WelcomePage />);
+  const button = wrapper.find("[data-test='create-button']")
+  expect(button.length).toBe(1);
+});
 // it('renders welcome message', () => {
 //   render(<WelcomePage />);  
 //   expect(screen.getByText('Petential')).toBeInTheDocument();

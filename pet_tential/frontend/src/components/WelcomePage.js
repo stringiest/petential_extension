@@ -50,7 +50,7 @@ export default class WelcomPage extends Component {
             <Button color="primary" to="/join" component={Link}>
               Join a Pack
             </Button>
-            <Button color="secondary" to="/create" component={Link}>
+            <Button data-test="create-button" color="secondary" to="/create" component={Link} >
               Create a Pack
             </Button>
           </ButtonGroup>
