@@ -67,7 +67,7 @@ export default class WelcomPage extends Component {
 
   render() {
     return(
-        <Router>
+        <Router data-test="component-welcome">
           <Switch>
             <Route exact path="/" render={() => {
               return this.state.packCode ? (
