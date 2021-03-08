@@ -1,6 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import TestRenderer, { act } from 'react-test-renderer';
+import React from "react";
+import Enzyme from 'enzyme';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { shallow, mount } from "enzyme";
 //import renderer from 'react-test-renderer';
 import FoodPage from '../components/FoodPage';
 // import {cleanup, fireEvent, render} from '@testing-library/react';
