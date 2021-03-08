@@ -34,7 +34,7 @@ export default class WalkPage extends Component {
     this.handleSubmitButtonPressed = this.handleSubmitButtonPressed.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.refreshList();
   }
 
@@ -108,7 +108,7 @@ export default class WalkPage extends Component {
 
   render() {
     return (
-      <div className="bg">
+      <div className="bg" data-test='component-walk'>
         <AppBar position="static" color="transparent" elevation={0}>
               <img src={require('./logo_without_words.png')} alt="logo" height={200} width={200}/>
         <Grid spacing={3} align="center">

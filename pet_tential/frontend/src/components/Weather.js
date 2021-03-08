@@ -32,7 +32,7 @@ function Weather() {
   // }
 
   return (
-      <main>
+      <main data-test='component-weather'>
         <h5>Get today's weather to plan your walk!</h5>
         <br />
         <div className="search-box">

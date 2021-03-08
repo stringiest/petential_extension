@@ -1,15 +1,16 @@
-
 import React from "react";
-import Enzyme from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-Enzyme.configure({ adapter: new Adapter() });
-import { shallow, mount } from "enzyme";
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import { shallow } from "enzyme";
 import CreatePackPage from '../components/CreatePackPage';
-// import toJson from "enzyme-to-json";
 
 it("renders without crashing", () => {
-    shallow(<CreatePackPage />);
-  });
+    const wrapper = shallow(<CreatePackPage />);
+    const appComponent = wrapper.find("[data-test='component-create-pack']")
+    expect(appComponent.length).toBe(1);
+});
+
+it("renders button for create pack", () => {
+    const wrapper = shallow(<CreatePackPage />);
+    const button = wrapper.find("[data-test='create-button']")
+    expect(button.length).toBe(1);
+});
 

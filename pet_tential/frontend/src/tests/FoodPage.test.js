@@ -1,9 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import TestRenderer, { act } from 'react-test-renderer';
-//import renderer from 'react-test-renderer';
+import React from "react";
+import { shallow, mount } from "enzyme";
 import FoodPage from '../components/FoodPage';
-import {cleanup, fireEvent, render} from '@testing-library/react';
 
 // feature - go to page food and expect content to be 'Food Log'
 // feature - fill in form and click Post, expect page to have content that they've just added
@@ -20,8 +17,8 @@ import {cleanup, fireEvent, render} from '@testing-library/react';
 
 // });
 
-// describe('Addition', () => {
-//   it('knows that 2 and 2 make 4', () => {
-//     expect(2 + 2).toBe(4);
-//   });
-// });
+it("renders without crashing", () => {
+    const wrapper = shallow(<FoodPage />);
+    const appComponent = wrapper.find("[data-test='component-food']")
+    expect(appComponent.length).toBe(1);
+});

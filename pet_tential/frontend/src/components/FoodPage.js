@@ -119,7 +119,7 @@ export default class FoodPage extends Component {
 
     render() {
         return (
-          <div className="bg">
+          <div className="bg" data-test='component-food'>
             <AppBar position="static" color="transparent" elevation={0}>
               <img src={require('./logo_without_words.png')} alt="logo" height={200} width={200}/>
             </AppBar>
