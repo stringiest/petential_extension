@@ -28,4 +28,4 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 //     let houmous = new Pack();
 //     expect(houmous.props.petName).toEqual({petName: "houmous", isHost: True})
 //   });
-});
+// });
