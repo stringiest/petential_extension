@@ -1,10 +1,6 @@
-
 import React from "react";
-
-import { shallow, mount } from "enzyme";
-import '@testing-library/jest-dom/extend-expect';
+import { shallow } from "enzyme";
 import CreatePackPage from '../components/CreatePackPage';
-
 
 it("renders without crashing", () => {
     const wrapper = shallow(<CreatePackPage />);
